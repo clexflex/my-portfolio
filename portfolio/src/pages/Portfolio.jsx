@@ -1,32 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-    CheckCircle2,
-    Briefcase,
-    Code2,
-    Mail,
-    Github,
-    Linkedin,
-    Database,
-    Wrench,
-    Terminal,
-    Layout,
-    Globe,
-    BookOpen
-} from 'lucide-react';
-import {
-    LanguageSection,
-    EducationSection,
-    AchievementsSection,
-    TestimonialsSection
-} from './PortfolioSections';
+import PersonalizedDashboard from './PersonalizedDashboard';
+import {     CheckCircle2,     Briefcase,     Code2,     Mail,     Github,     Linkedin,     Database,     Wrench,     Terminal,     Layout,     Globe,     BookOpen } from 'lucide-react';
+import {     LanguageSection,     EducationSection,     AchievementsSection,     TestimonialsSection }from './PortfolioSections';
+import { GraduationCap, Trophy, Rocket } from 'lucide-react';
+
 
 const Portfolio = () => {
     const { scrollYProgress } = useScroll();
     const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+    const [selectedMilestone, setSelectedMilestone] = useState(null);
 
+    const milestones = [
+        {
+        id: 1,
+        date: "Jun 2024",
+        title: "Web Developer",
+        organization: "Maximize Market Research Pvt. Ltd.",
+        icon: <Briefcase className="w-6 h-6" />,
+        color: "bg-blue-500",
+        achievements: [
+            "Led development of TeamSync - Employee Management System",
+            "Built complex REST APIs with Node.js/Express.js",
+            "Implemented secure authentication systems",
+            "Designed scalable MongoDB schemas"
+        ],
+        skills: ["MERN Stack", "REST APIs", "System Architecture"]
+        },
+        {
+        id: 2,
+        date: "Jan 2024",
+        title: "Research Engineer Trainee",
+        organization: "Zeetron Networks Pvt. Ltd.",
+        icon: <Code2 className="w-6 h-6" />,
+        color: "bg-purple-500",
+        achievements: [
+            "Developed interactive data visualization tools",
+            "Integrated real-time API updates",
+            "Collaborated with cross-functional teams"
+        ],
+        skills: ["React.js", "Data Visualization", "API Integration"]
+        },
+        {
+        id: 3,
+        date: "Jul 2022",
+        title: "Freelance Full Stack Developer",
+        organization: "Self-Employed",
+        icon: <Rocket className="w-6 h-6" />,
+        color: "bg-green-500",
+        achievements: [
+            "Built e-commerce platform with MERN stack",
+            "Developed custom portfolio websites",
+            "Implemented user authentication systems"
+        ],
+        skills: ["Full Stack Development", "E-commerce", "UI/UX Design"]
+        },
+        {
+        id: 4,
+        date: "Aug 2020",
+        title: "B.Tech in Computer Science",
+        organization: "Manipal University Jaipur",
+        icon: <GraduationCap className="w-6 h-6" />,
+        color: "bg-yellow-500",
+        achievements: [
+            "CGPA: 7.77/10",
+            "Advanced computing concepts",
+            "Modern software development"
+        ],
+        skills: ["Computer Science", "Software Engineering", "Data Structures"]
+        }
+    ];
     const skillCategories = [
         {
             title: "Programming Languages",
@@ -195,6 +240,90 @@ const Portfolio = () => {
                 </motion.div>
             </section>
 
+            <div className="relative min-h-screen py-20 px-4">
+                  <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 via-purple-500 to-green-500" />
+                  
+                  <div className="max-w-4xl mx-auto">
+                    <h2 className="text-4xl font-bold mb-16 text-center">Professional Journey</h2>
+                    
+                    <div className="space-y-24">
+                      {milestones.map((milestone, index) => (
+                        <motion.div
+                          key={milestone.id}
+                          initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6 }}
+                          className={`relative ${index % 2 === 0 ? 'pr-8 lg:ml-auto lg:pr-0 lg:pl-32' : 'pl-8 lg:mr-auto lg:pl-0 lg:pr-32'} lg:w-1/2`}
+                        >
+                          <motion.div
+                            className={`absolute top-0 ${index % 2 === 0 ? '-right-4 lg:left-0' : '-left-4 lg:right-0'} w-8 h-8 rounded-full ${milestone.color} flex items-center justify-center shadow-lg`}
+                            whileHover={{ scale: 1.2 }}
+                          >
+                            {milestone.icon}
+                          </motion.div>
+                          
+                          <Card
+                            className="bg-slate-800/50 border-none overflow-hidden cursor-pointer"
+                            onClick={() => setSelectedMilestone(selectedMilestone === milestone.id ? null : milestone.id)}
+                          >
+                            <motion.div
+                              className="p-6"
+                              initial={false}
+                              animate={{ height: selectedMilestone === milestone.id ? 'auto' : 'auto' }}
+                            >
+                              <div className="flex justify-between items-start mb-4">
+                                <div>
+                                  <h3 className="text-xl font-bold">{milestone.title}</h3>
+                                  <p className="text-blue-400">{milestone.organization}</p>
+                                </div>
+                                <span className="text-sm text-slate-400">{milestone.date}</span>
+                              </div>
+                              
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{
+                                  opacity: selectedMilestone === milestone.id ? 1 : 0,
+                                  height: selectedMilestone === milestone.id ? 'auto' : 0
+                                }}
+                                transition={{ duration: 0.3 }}
+                              >
+                                <div className="space-y-4 pt-4">
+                                  <div>
+                                    <h4 className="font-semibold text-blue-400 mb-2">Key Achievements</h4>
+                                    <ul className="space-y-2">
+                                      {milestone.achievements.map((achievement, i) => (
+                                        <li key={i} className="flex items-center gap-2">
+                                          <Trophy className="w-4 h-4 text-yellow-500" />
+                                          <span className="text-slate-300">{achievement}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                  
+                                  <div>
+                                    <h4 className="font-semibold text-blue-400 mb-2">Skills Developed</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {milestone.skills.map((skill, i) => (
+                                        <span
+                                          key={i}
+                                          className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm"
+                                        >
+                                          {skill}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            </motion.div>
+                          </Card>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
 
             {/* Skills Section */}
             <section className="min-h-screen bg-slate-800/50 py-20 px-4 md:px-20">
@@ -221,10 +350,21 @@ const Portfolio = () => {
                                         </h3>
                                         <div className="space-y-2">
                                             {category.skills.map((skill) => (
-                                                <div key={skill} className="flex items-center gap-2">
-                                                    <CheckCircle2 size={16} className="text-green-400" />
-                                                    <span>{skill}</span>
-                                                </div>
+                                                <motion.div
+                                                    key={skill}
+                                                    initial={{ width: 0 }}
+                                                    whileInView={{ width: "100%" }}
+                                                    viewport={{ once: true }}
+                                                    transition={{ duration: 1.5, ease: "easeOut" }}
+                                                    className="w-full bg-gray-600 rounded-md"
+                                                >
+                                                    <motion.div
+                                                        className="bg-blue-500 text-xs text-white p-1 rounded-md"
+                                                        style={{ width: "70%" }}  // Adjust this percentage based on proficiency
+                                                    >
+                                                        {skill}
+                                                    </motion.div>
+                                                </motion.div>
                                             ))}
                                         </div>
                                     </CardContent>
@@ -401,6 +541,9 @@ const Portfolio = () => {
                     <TestimonialsSection />
                 </motion.div>
             </section>
+
+            <PersonalizedDashboard />
+
             {/* Contact Section */}
             <section className="min-h-screen py-20 px-4 md:px-20">
                 <motion.div
@@ -413,9 +556,7 @@ const Portfolio = () => {
                     <p className="text-xl text-slate-300 mb-8">
                         Let's work together on your next project
                     </p>
-                    <Button size="lg" className="flex items-center gap-2">
-                        <Mail size={20} /> yashrajjghosalkar@gmail.com
-                    </Button>
+                    
                 </motion.div>
             </section>
         </div>
